@@ -7,6 +7,7 @@
                 <p><?php the_content(); ?></p>
             <?php endwhile; ?>
             <?php endif; ?>   
+            <?php wp_link_pages(); ?>
         </div>
     </div>
 <?php get_footer(); ?>

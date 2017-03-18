@@ -21,7 +21,16 @@ function register_CS_styles() {
 function register_CS_scripts() {
     wp_register_script('jquery_local', get_stylesheet_directory_uri() . '/assets/js/jquery-2.2.4.min.js','','vendor',true);
     wp_register_script('bootstrap', get_stylesheet_directory_uri() . '/assets/js/bootstrap.min.js', 'jquery_local' , 'vendor' , true );
+    wp_register_script('app', get_stylesheet_directory_uri() . '/assets/js/app.js', 'jquery_local' , '1.0.0' , true );
     wp_dequeue_script('jquery');
     wp_enqueue_script('jquery_local');
     wp_enqueue_script('bootstrap');
+    wp_enqueue_script('app');    
+}
+
+add_action( 'admin_enqueue_scripts', 'cs_enqueue_color_picker' );
+function cs_enqueue_color_picker( $hook_suffix ) {
+    // first check that $hook_suffix is appropriate for your admin page
+    wp_enqueue_style( 'wp-color-picker' );
+    wp_enqueue_script( 'my-script-handle', get_stylesheet_directory_uri() . '/assets/js/admin_app.js', array( 'wp-color-picker' ), false, true );
 }

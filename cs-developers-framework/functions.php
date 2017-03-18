@@ -1,6 +1,8 @@
 <?php
 // Functions Main File 
 include_once('library/inc.php');
+include_once('library/settings.php');
+include_once('library/nav_walker.php');
 
 
 // Theme Support 
@@ -23,18 +25,20 @@ function CS_custom_features()  {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'automatic-feed-links' );
 	add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ) );
-}
+	}
+
 add_action( 'after_setup_theme', 'CS_custom_features' );
 
+register_nav_menus( array(
+	'primary' => __( 'Primary Menu', 'cs-developers-framework' ),
+) );
 
 
+function wp_title_filter( $title ){
 
-function wp_title_filter(){
-
-if ( is_home() ){
-$title = bloginfo('name');
-return $title;
-}else{
+if(  is_home() || is_front_page() ) {
+    return get_bloginfo( 'name' ) . ' | ' . get_bloginfo( 'description' );
+  }else{
 	$title =  get_the_title() . ' | ' .  get_bloginfo('name');
 return $title;
 }
@@ -48,3 +52,17 @@ function text_domain_Setup(){
 }
 // Set content width value based on the theme's design
 
+function cs_login_url() {  return home_url(); }
+
+function cs_login_title() { return get_option( 'blogname' ); }
+
+add_filter( 'login_headerurl', 'cs_login_url' );
+add_filter( 'login_headertitle', 'cs_login_title' );
+
+function cs_login_form_style() {
+    wp_register_style( 'admin_login', get_stylesheet_directory_uri() . '/assets/css/login.css' );
+	wp_enqueue_style('admin_login');
+}
+add_action('login_enqueue_scripts', 'cs_login_form_style');
+
+?>
